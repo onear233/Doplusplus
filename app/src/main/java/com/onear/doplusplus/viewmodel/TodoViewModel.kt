@@ -1,4 +1,6 @@
 package com.onear.doplusplus.viewmodel
 
-class TodoViewModel {
+import androidx.lifecycle.ViewModel
+
+class TodoViewModel : ViewModel() {
 }

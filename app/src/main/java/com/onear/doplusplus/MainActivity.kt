@@ -4,17 +4,25 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.onear.doplusplus.ui.screen.MainScreen
 import com.onear.doplusplus.ui.theme.DoTheme
 
@@ -64,12 +72,12 @@ class MainActivity : ComponentActivity() {
 //}
 
 enum class AppDestinations(
-    val label: String,
+    @StringRes val label: Int,
     val icon: ImageVector,
 ) {
-    HOME("Home", Icons.Default.Home),
-    FAVORITES("Favorites", Icons.Default.Favorite),
-    PROFILE("Profile", Icons.Default.AccountBox),
+    TODAY(R.string.nav_today, Icons.Default.DateRange),
+    TODO(R.string.nav_todo, Icons.Default.List),
+    PROFILE(R.string.nav_profile, Icons.Default.Person),
 }
 
 @Composable
@@ -77,6 +85,7 @@ fun Greeting(content: String, modifier: Modifier = Modifier) {
     MaterialTheme() {
         Text(
             text = content,
+            fontSize = 30.sp,
             modifier = modifier
         )
     }
@@ -91,11 +100,11 @@ fun GreetingPreview() {
     }
 }
 
-data class Message(val author : String,val content : String)
+data class Message(val author: String, val content: String)
 
 
 @Composable
-fun GiveSomeCard(msg: Message){
+fun GiveSomeCard(msg: Message) {
     Column() {
         Text(msg.author)
         Text(msg.content)
@@ -106,8 +115,8 @@ fun GiveSomeCard(msg: Message){
 
 @Preview
 @Composable
-fun previewGiveSomeCard(){
+fun previewGiveSomeCard() {
     GiveSomeCard(
-        msg = (Message("gunmu","woshigunmu"))
+        msg = (Message("gunmu", "woshigunmu"))
     )
 }

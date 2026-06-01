@@ -1,4 +1,6 @@
 package com.onear.doplusplus.viewmodel
 
-class ProfileViewModel {
+import androidx.lifecycle.ViewModel
+
+class ProfileViewModel : ViewModel() {
 }
