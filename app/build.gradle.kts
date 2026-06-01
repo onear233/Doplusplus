@@ -55,4 +55,6 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+    // 基础图标库（包含 Home, Favorite 等常用图标）
+    implementation(libs.androidx.compose.material.icons.core)
 }

@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">Do++</string>
+
+<!--    问候-->
+    <string name="greeting_morning">早上好！</string>
+    <string name="greeting_noon">中午好！</string>
+    <string name="greeting_afternoon">下午好！</string>
+    <string name="greeting_night">晚上好！</string>
+
+<!--    NavText-->
+    <string name="nav_today">今日</string>
+    <string name="nav_todo">待办</string>
+    <string name="nav_profile">我的</string>
+
 </resources>
