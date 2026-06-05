@@ -12,9 +12,9 @@ import java.sql.Date
 @Entity(tableName = "todo_database")
 data class TodoTask(
     @PrimaryKey(autoGenerate = true)
-    val taskID: Int,
+    val taskID: Int = 0,
     var taskText: String,
-    var taskDueDate: Long?,
-    val taskCreateDate: Long,
+    var taskDueDate: Long? = null,
+    val taskCreateDate: Long = System.currentTimeMillis(),
     var isCompleted: Boolean = false
 )

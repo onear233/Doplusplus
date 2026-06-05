@@ -8,20 +8,19 @@ import java.util.Date
 class TodoRepository(private val todoDao: TodoDao) {
     val allTasks: Flow<List<TodoTask>> = todoDao.getAllTasks()
 
-    suspend fun addTask(title: String) {
-        if (title.isNotBlank()) {
-            todoDao.insertTask(
-                //MOCK DATA
-                TodoTask(
-                    taskID = 0,
-                    taskText = "TODO()",
-                    taskDueDate = null,
-                    taskCreateDate = 114514,
-                    isCompleted = false
-                )
-            )
-        }
-    }
+//    suspend fun addTask(title: String) {
+//        if (title.isNotBlank()) {
+//            todoDao.insertTask(
+//                //MOCK DATA
+//                TodoTask(
+//                    taskID = 0,
+//                    taskText = title,
+//                    taskDueDate = null,
+//                    isCompleted = false
+//                )
+//            )
+//        }
+//    }
 
     suspend fun toggleTaskCompletion(task: TodoTask) {
         todoDao.updateTask(task.copy(isCompleted = !task.isCompleted))
@@ -29,5 +28,9 @@ class TodoRepository(private val todoDao: TodoDao) {
 
     suspend fun deleteTask(task: TodoTask) {
         todoDao.deleteTask(task)
+    }
+
+    suspend fun addTask(task: TodoTask){
+        todoDao.insertTask(task)
     }
 }

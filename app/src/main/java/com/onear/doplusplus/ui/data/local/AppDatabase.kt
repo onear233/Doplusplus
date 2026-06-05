@@ -6,6 +6,9 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.onear.doplusplus.ui.data.entity.TodoTask
 
+
+//Database Object
+
 @Database(entities = [TodoTask::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 

@@ -28,6 +28,8 @@ import com.onear.doplusplus.ui.theme.DoTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
@@ -38,38 +40,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-//@PreviewScreenSizes
-//@Composable
-//fun DoApp() {
-//    var currentDestination by rememberSaveable { mutableStateOf(AppDestinations.HOME) }
-//
-//    NavigationSuiteScaffold(
-//        navigationSuiteItems = {
-//            AppDestinations.entries.forEach {
-//                item(
-//                    icon = {
-//                        Icon(
-//                            it.icon,
-//                            contentDescription = it.label
-//                        )
-//                    },
-//                    label = { Text(it.label) },
-//                    selected = it == currentDestination,
-//                    onClick = { currentDestination = it }
-//                )
-//            }
-//        }
-//    ) {
-//        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-//            Greeting(
-//                content = when,
-//                modifier = Modifier.padding(innerPadding)
-//            )
-//            previewGiveSomeCard()
-//        }
-//    }
-//}
 
 enum class AppDestinations(
     @StringRes val label: Int,
@@ -101,22 +71,3 @@ fun GreetingPreview() {
 }
 
 data class Message(val author: String, val content: String)
-
-
-@Composable
-fun GiveSomeCard(msg: Message) {
-    Column() {
-        Text(msg.author)
-        Text(msg.content)
-    }
-
-}
-
-
-@Preview
-@Composable
-fun previewGiveSomeCard() {
-    GiveSomeCard(
-        msg = (Message("gunmu", "woshigunmu"))
-    )
-}
