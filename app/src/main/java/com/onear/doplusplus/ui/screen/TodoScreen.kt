@@ -1,12 +1,16 @@
 package com.onear.doplusplus.ui.screen
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.rememberTextFieldState
@@ -17,6 +21,9 @@ import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
@@ -38,10 +45,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.layout
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -50,6 +59,9 @@ import com.onear.doplusplus.ui.data.TodoRepository
 import com.onear.doplusplus.ui.data.entity.TodoTask
 import com.onear.doplusplus.viewmodel.TodayViewModel
 import com.onear.doplusplus.viewmodel.TodoViewModel
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -170,11 +182,12 @@ fun TodoScreen(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                items(items = todoList, key = { it.taskID }) { task ->
-                    Text(
-                        text = task.taskText,
-                        modifier = Modifier.padding(8.dp)
-                    )
+                items(items = todoList, key = { it.taskID }) { task -> ListCard(
+                    task,
+                    onCheckedChange = {task.isCompleted
+
+                }
+                )
                 }
             }
         }
@@ -183,28 +196,93 @@ fun TodoScreen(
 
 }
 
+
+@Composable
+fun ListCard(
+    task: TodoTask,
+    onCheckedChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 4.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = if (task.isCompleted)
+                MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+            else
+                MaterialTheme.colorScheme.surfaceContainerHigh
+        )
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Checkbox(
+                checked = task.isCompleted,
+                onCheckedChange = onCheckedChange
+            )
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+            Column(
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(
+                    text = task.taskText,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = if (task.isCompleted)
+                        MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                    else
+                        MaterialTheme.colorScheme.onSurface,
+                    textDecoration = if (task.isCompleted)
+                        TextDecoration.LineThrough
+                    else
+                        TextDecoration.None,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = "创建于: ${formatTime(task.taskCreateDate)}",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                )
+            }
+        }
+    }
+}
+
+private fun formatTime(timestamp: Long): String {
+    val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+    return sdf.format(Date(timestamp))
+}
+
 @Composable
 fun FilterChip(chipType: ChipType) {
     var selected by remember { mutableStateOf(false) }
 
-    FilterChip(
-        onClick = { if (chipType == ChipType.ADD) else selected = !selected },
-        label = {
-            Text("Filter chip")
-        },
-        selected = selected,
-        leadingIcon = if (selected) {
-            {
-                Icon(
-                    imageVector = Icons.Filled.Done,
-                    contentDescription = "Done icon",
-                    modifier = Modifier.size(FilterChipDefaults.IconSize)
-                )
-            }
-        } else {
-            null
-        },
-    )
+//    FilterChip(
+//        onClick = { if (chipType == ChipType.ADD) else selected = !selected },
+//        label = {
+//            Text("Filter chip")
+//        },
+//        selected = selected,
+//        leadingIcon = if (selected) {
+//            {
+//                Icon(
+//                    imageVector = Icons.Filled.Done,
+//                    contentDescription = "Done icon",
+//                    modifier = Modifier.size(FilterChipDefaults.IconSize)
+//                )
+//            }
+//        } else {
+//            null
+//        },
+//    )
 }
 
 enum class ChipType() {
