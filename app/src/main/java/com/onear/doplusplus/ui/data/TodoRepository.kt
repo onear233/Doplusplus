@@ -33,4 +33,7 @@ class TodoRepository(private val todoDao: TodoDao) {
     suspend fun addTask(task: TodoTask){
         todoDao.insertTask(task)
     }
+    suspend fun updateTask(task: TodoTask){
+        todoDao.updateTask(task)
+    }
 }

@@ -182,12 +182,14 @@ fun TodoScreen(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                items(items = todoList, key = { it.taskID }) { task -> ListCard(
-                    task,
-                    onCheckedChange = {task.isCompleted
+                items(items = todoList, key = { it.taskID }) { task ->
+                    ListCard(
+                        task,
 
-                }
-                )
+                        onCheckedChange = {
+                            viewModel.completeTask(task,it)
+                        }
+                    )
                 }
             }
         }
@@ -195,7 +197,6 @@ fun TodoScreen(
 
 
 }
-
 
 @Composable
 fun ListCard(
@@ -222,7 +223,9 @@ fun ListCard(
         ) {
             Checkbox(
                 checked = task.isCompleted,
-                onCheckedChange = onCheckedChange
+                onCheckedChange = { isChecked ->
+                    onCheckedChange(isChecked)
+                }
             )
 
             Spacer(modifier = Modifier.width(8.dp))

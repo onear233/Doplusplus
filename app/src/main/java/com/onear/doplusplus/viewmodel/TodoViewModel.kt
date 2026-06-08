@@ -26,6 +26,15 @@ class TodoViewModel(private val todoRepository: TodoRepository) : ViewModel() {
 
     }
 
+    fun completeTask(todoTask: TodoTask,isChecked : Boolean) {
+        viewModelScope.launch {
+            // 💡 利用 copy 创建一个全新对象，并把状态反转
+            val updatedTask = todoTask.copy(isCompleted = !todoTask.isCompleted)
+            // 💡 写入数据库。Room 写入成功后，Flow 会自动发射新列表，UI 就会瞬间刷新！
+            todoRepository.updateTask(updatedTask)
+        }
+    }
+
 
     //TODO("UNDERSTANDING THE CODE DEEPLY")
     val todoListState: StateFlow<List<TodoTask>> = todoRepository.allTasks
