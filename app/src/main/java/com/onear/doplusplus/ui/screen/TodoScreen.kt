@@ -1,6 +1,8 @@
 package com.onear.doplusplus.ui.screen
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.rememberTextFieldState
@@ -33,17 +36,22 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -59,6 +67,9 @@ import com.onear.doplusplus.ui.data.TodoRepository
 import com.onear.doplusplus.ui.data.entity.TodoTask
 import com.onear.doplusplus.viewmodel.TodayViewModel
 import com.onear.doplusplus.viewmodel.TodoViewModel
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -84,12 +95,9 @@ fun TodoScreen(
     var inputText by remember { mutableStateOf("") }
 
     Scaffold(
-
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         bottomBar = {
             BottomAppBar(
-                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                contentColor = MaterialTheme.colorScheme.primary,
             ) {
                 Row(
                     modifier = Modifier.fillMaxSize()
@@ -183,14 +191,27 @@ fun TodoScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 items(items = todoList, key = { it.taskID }) { task ->
-                    ListCard(
-                        task,
+//                    val dismissState = rememberSwipeToDismissBoxState()
+//                    //LIU: LaunchedEffect是一个能让我们在compose里执行异步任务的工具
+//                    //如果直接在composable里写这种任务，会导致界面一旦重组刷新，该请求就会被反复执行
+//                    //它的生命周期紧紧的跟随组建的生命周期
+//                    //传入key：决定何时重新执行，即：key不变化，不会重复执行
+//                    //在这个地方是，如果targetValue变成了EndToStart就执行delete
+//                    LaunchedEffect(dismissState.targetValue) {
+//                        if (dismissState.targetValue == SwipeToDismissBoxValue.EndToStart) {
+//                            kotlinx.coroutines.delay(200) //给动画留 200ms 的飞出时间
+//                            viewModel.deleteTask(task)
+//                        }
+//                    }
+                    //https://developer.android.google.cn/develop/ui/compose/touch-input/user-interactions/swipe-to-dismiss?hl=zh-cn
 
-                        onCheckedChange = {
-                            viewModel.completeTask(task,it)
-                        }
+                    ListCard(
+                        task = task,
+                        onCheckedChange = { viewModel.completeTask(task) },
+                        onRemove = { viewModel.deleteTask(task) }
                     )
                 }
+
             }
         }
     }
@@ -198,65 +219,107 @@ fun TodoScreen(
 
 }
 
+
 @Composable
 fun ListCard(
     task: TodoTask,
-    onCheckedChange: (Boolean) -> Unit,
+    onCheckedChange: (Boolean) -> Unit, //回调方法，即：ListCard不可以对数据做任何操作，要由上一级完成
+    onRemove: (TodoTask) -> Unit, //回调方法，处理右滑删除
     modifier: Modifier = Modifier
 ) {
-    Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 4.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = if (task.isCompleted)
-                MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
-            else
-                MaterialTheme.colorScheme.surfaceContainerHigh
-        )
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Checkbox(
-                checked = task.isCompleted,
-                onCheckedChange = { isChecked ->
-                    onCheckedChange(isChecked)
+
+    val dismissState = rememberSwipeToDismissBoxState()
+
+    val scope = rememberCoroutineScope()
+    val swipeToDismissBoxState = rememberSwipeToDismissBoxState(
+        confirmValueChange = {
+            if (it == SwipeToDismissBoxValue.EndToStart) {
+                scope.launch {
+                        delay(200)
+                        onRemove(task)
                 }
+
+
+            }
+            // Reset item when toggling done status
+            it != SwipeToDismissBoxValue.StartToEnd
+        }
+    )
+    SwipeToDismissBox(
+        state = swipeToDismissBoxState,
+        modifier = Modifier.fillMaxSize(),
+        backgroundContent = {
+            when (swipeToDismissBoxState.dismissDirection) {
+                SwipeToDismissBoxValue.EndToStart -> {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = "Remove item",
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(Color.Red)
+                            .wrapContentSize(Alignment.CenterEnd)
+                            .padding(12.dp),
+                        tint = Color.White
+                    )
+                }
+
+                SwipeToDismissBoxValue.Settled -> {}
+                else -> {}
+            }
+        }
+
+    ) {
+        Card(
+            modifier = modifier
+                .fillMaxWidth(),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.background
             )
-
-            Spacer(modifier = Modifier.width(8.dp))
-
-            Column(
-                modifier = Modifier.weight(1f)
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp, vertical = 4.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = task.taskText,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = if (task.isCompleted)
-                        MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
-                    else
-                        MaterialTheme.colorScheme.onSurface,
-                    textDecoration = if (task.isCompleted)
-                        TextDecoration.LineThrough
-                    else
-                        TextDecoration.None,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
+                Checkbox(
+                    checked = task.isCompleted,
+                    onCheckedChange = { isChecked ->
+                        onCheckedChange(isChecked)
+                    }
                 )
 
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = "创建于: ${formatTime(task.taskCreateDate)}",
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
-                )
+                Spacer(modifier = Modifier.width(4.dp))
+
+                Column(
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(
+                        text = task.taskText,
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = if (task.isCompleted)
+                            MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                        else
+                            MaterialTheme.colorScheme.onSurface,
+                        textDecoration = if (task.isCompleted)
+                            TextDecoration.LineThrough
+                        else
+                            TextDecoration.None,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
+
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = "创建于: ${formatTime(task.taskCreateDate)}",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+                    )
+                }
             }
         }
     }
+
 }
 
 private fun formatTime(timestamp: Long): String {
@@ -290,4 +353,50 @@ fun FilterChip(chipType: ChipType) {
 
 enum class ChipType() {
     ADD, FILTER
+}
+
+@Preview(showBackground = true, name = "正常状态Light")
+@Composable
+fun ListCardPreview() {
+    com.onear.doplusplus.ui.theme.DoTheme {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
+        ) {
+            Text(
+                text = "未完成状态",
+                style = MaterialTheme.typography.labelLarge,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
+            )
+            ListCard(
+                task = TodoTask(
+                    taskID = 1,
+                    taskText = "Task to be done",
+                    taskDueDate = null,
+                    taskCreateDate = System.currentTimeMillis(),
+                    isCompleted = false
+                ),
+                onCheckedChange = {}, onRemove = {}
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(
+                text = "已完成状态",
+                style = MaterialTheme.typography.labelLarge,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)
+            )
+            ListCard(
+                task = TodoTask(
+                    taskID = 2,
+                    taskText = "Task has been completed",
+                    taskDueDate = null,
+                    taskCreateDate = System.currentTimeMillis() - 3600000, // 一小时前
+                    isCompleted = true
+                ),
+                onCheckedChange = { }, onRemove = {}
+            )
+        }
+    }
 }
