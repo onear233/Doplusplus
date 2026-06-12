@@ -1,10 +1,10 @@
-package com.onear.doplusplus.ui.data.local
+package com.onear.doplusplus.data.local
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.onear.doplusplus.ui.data.entity.TodoTask
+import com.onear.doplusplus.data.entity.TodoTask
 
 
 //Database Object

@@ -14,8 +14,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.onear.doplusplus.AppDestinations
-import com.onear.doplusplus.ui.data.TodoRepository
-import com.onear.doplusplus.ui.data.local.AppDatabase
+import com.onear.doplusplus.data.TodoRepository
+import com.onear.doplusplus.data.local.AppDatabase
 import com.onear.doplusplus.viewmodel.TodoViewModel
 
 @Composable

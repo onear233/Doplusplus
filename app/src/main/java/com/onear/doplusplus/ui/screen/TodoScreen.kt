@@ -51,7 +51,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.onear.doplusplus.ui.data.entity.TodoTask
+import com.onear.doplusplus.data.entity.TodoTask
 import com.onear.doplusplus.viewmodel.TodoViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -72,7 +72,7 @@ fun TodoScreen(
     topBar：屏幕顶部的应用栏。
     bottomBar：屏幕底部的应用栏。
     floatingActionButton：悬浮在屏幕右下角的按钮，可以使用该按钮来显示关键操作。
-    * */
+    */
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     //有点像WPF里的binding
     //界面刷新是数据驱动的，而不是直接操作

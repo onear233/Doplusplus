@@ -1,5 +1,13 @@
 package com.onear.doplusplus.ui.screen
 
-class ProfileScreen {
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.Preview
+
+
+@Preview
+@Composable
+fun ProfileScreen(){
 
 }
+
+

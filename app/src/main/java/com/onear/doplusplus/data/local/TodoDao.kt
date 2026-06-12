@@ -1,11 +1,11 @@
-package com.onear.doplusplus.ui.data.local
+package com.onear.doplusplus.data.local
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.onear.doplusplus.ui.data.entity.TodoTask
+import com.onear.doplusplus.data.entity.TodoTask
 import kotlinx.coroutines.flow.Flow
 
 

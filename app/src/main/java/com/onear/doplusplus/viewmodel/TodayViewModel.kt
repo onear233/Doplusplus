@@ -1,17 +1,11 @@
 package com.onear.doplusplus.viewmodel
 
 import android.icu.util.Calendar
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.onear.doplusplus.R
-import com.onear.doplusplus.ui.data.TodoRepository
-import com.onear.doplusplus.ui.data.entity.TodoTask
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.stateIn
 
 class TodayViewModel() : ViewModel() {
     //使用StateFlow存储当前的问候语

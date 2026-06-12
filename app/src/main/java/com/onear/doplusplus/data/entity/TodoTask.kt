@@ -1,4 +1,4 @@
-package com.onear.doplusplus.ui.data.entity
+package com.onear.doplusplus.data.entity
 
 import android.R
 import androidx.room.Entity
