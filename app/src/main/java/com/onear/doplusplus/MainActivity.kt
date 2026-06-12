@@ -5,14 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.Column
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.List
-import androidx.compose.material.icons.filled.AccountBox
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.MaterialTheme
@@ -21,9 +15,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.onear.doplusplus.ui.screen.MainScreen
+import com.onear.doplusplus.ui.screen.main.MainScreen
 import com.onear.doplusplus.ui.theme.DoTheme
 
 class MainActivity : ComponentActivity() {

@@ -1,4 +1,4 @@
-package com.onear.doplusplus.ui.screen
+package com.onear.doplusplus.ui.screen.main
 
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text

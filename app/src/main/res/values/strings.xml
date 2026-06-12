@@ -1,15 +1,24 @@
 <resources>
     <string name="app_name">Do++</string>
 
-<!--    问候-->
+    <!--    问候-->
     <string name="greeting_morning">早上好！</string>
     <string name="greeting_noon">中午好！</string>
     <string name="greeting_afternoon">下午好！</string>
     <string name="greeting_night">晚上好！</string>
 
-<!--    NavText-->
+    <!--    NavText-->
     <string name="nav_today">今日</string>
     <string name="nav_todo">待办</string>
     <string name="nav_profile">我的</string>
+
+    <string name="login_text">使用账号和密码登录</string>
+    <string name="register_button">注册</string>
+    <string name="login_button">登录</string>
+    <string name="account_textbox">账号</string>
+    <string name="password_textbox">密码</string>
+    <string name="forget_password_button">忘记密码</string>
+    <string name="display_password_checkbox">显示密码</string>
+    <string name="license_agreement_checkbox">已阅读并同意《隐私政策》和《服务协议》</string>
 
 </resources>

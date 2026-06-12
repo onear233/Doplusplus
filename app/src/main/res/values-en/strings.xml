@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Do++</string>
+    <string name="greeting_morning">Good Morning!</string>
+    <string name="greeting_noon">Good Afternoon!</string>
+    <string name="greeting_afternoon">Good Afternoon!</string>
+    <string name="greeting_night">Good Evening!</string>
+    <string name="nav_today">Today</string>
+    <string name="nav_todo">ToDo</string>
+    <string name="nav_profile">Me</string>
+    <string name="login_text">Use an account and password to login</string>
+    <string name="register_button">Register</string>
+    <string name="login_button">Login</string>
+    <string name="account_textbox">Account</string>
+    <string name="password_textbox">Password</string>
+    <string name="forget_password_button">Forget Password</string>
+    <string name="display_password_checkbox">Display Password</string>
+    <string name="license_agreement_checkbox">I\'ve read the Privacy Policy and the Service Agreement</string>
+</resources>

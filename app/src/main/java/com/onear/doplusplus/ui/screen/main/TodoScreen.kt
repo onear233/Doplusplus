@@ -1,4 +1,4 @@
-package com.onear.doplusplus.ui.screen
+package com.onear.doplusplus.ui.screen.main
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -52,6 +52,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.onear.doplusplus.data.entity.TodoTask
+import com.onear.doplusplus.ui.theme.DoTheme
 import com.onear.doplusplus.viewmodel.TodoViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -342,7 +343,7 @@ enum class ChipType() {
 @Preview(showBackground = true, name = "正常状态Light")
 @Composable
 fun ListCardPreview() {
-    com.onear.doplusplus.ui.theme.DoTheme {
+    DoTheme {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
