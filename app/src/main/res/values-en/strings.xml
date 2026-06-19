@@ -16,4 +16,6 @@
     <string name="forget_password_button">Forget Password</string>
     <string name="display_password_checkbox">Display Password</string>
     <string name="license_agreement_checkbox">I\'ve read the Privacy Policy and the Service Agreement</string>
+    <string name="click_login_text">Click to login</string>
+
 </resources>

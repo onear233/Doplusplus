@@ -20,5 +20,6 @@
     <string name="forget_password_button">忘记密码</string>
     <string name="display_password_checkbox">显示密码</string>
     <string name="license_agreement_checkbox">已阅读并同意《隐私政策》和《服务协议》</string>
+    <string name="click_login_text">点击登录</string>
 
 </resources>

@@ -176,18 +176,6 @@ fun TodoScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 items(items = todoList, key = { it.taskID }) { task ->
-//                    val dismissState = rememberSwipeToDismissBoxState()
-//                    //LIU: LaunchedEffect是一个能让我们在compose里执行异步任务的工具
-//                    //如果直接在composable里写这种任务，会导致界面一旦重组刷新，该请求就会被反复执行
-//                    //它的生命周期紧紧的跟随组建的生命周期
-//                    //传入key：决定何时重新执行，即：key不变化，不会重复执行
-//                    //在这个地方是，如果targetValue变成了EndToStart就执行delete
-//                    LaunchedEffect(dismissState.targetValue) {
-//                        if (dismissState.targetValue == SwipeToDismissBoxValue.EndToStart) {
-//                            kotlinx.coroutines.delay(200) //给动画留 200ms 的飞出时间
-//                            viewModel.deleteTask(task)
-//                        }
-//                    }
                     //https://developer.android.google.cn/develop/ui/compose/touch-input/user-interactions/swipe-to-dismiss?hl=zh-cn
 
                     ListCard(

@@ -16,19 +16,42 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.onear.doplusplus.ui.screen.auth.LoginScreen
 import com.onear.doplusplus.ui.screen.main.MainScreen
 import com.onear.doplusplus.ui.theme.DoTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
-        
+
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             DoTheme {
-//                DoApp()
-                MainScreen()
+                val navController = rememberNavController()
+
+                NavHost(
+                    navController = navController,
+                    startDestination = "main"
+                ) {
+                    composable("main") {
+                        MainScreen(
+                            onNavigateToLogin = {
+                                navController.navigate("login")
+                            }
+                        )
+                    }
+                    composable("login") {
+                        LoginScreen(
+                            onNavigateBack = {
+                                navController.popBackStack()
+                            }
+                        )
+                    }
+                }
             }
         }
     }

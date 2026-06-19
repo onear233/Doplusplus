@@ -58,13 +58,13 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     implementation(libs.androidx.compose.material.icons.core)
     implementation(libs.androidx.compose.material.icons.extended)
-    
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.coil.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     val room_version = "2.8.4"
 
     implementation("androidx.room:room-runtime:$room_version")
 
-    // If this project uses any Kotlin source, use Kotlin Symbol Processing (KSP)
-    // See Add the KSP plugin to your project
+
     ksp("androidx.room:room-compiler:$room_version")
 }
