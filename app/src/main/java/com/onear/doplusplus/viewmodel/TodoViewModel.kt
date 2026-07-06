@@ -22,6 +22,9 @@ class TodoViewModel(private val todoRepository: TodoRepository) : ViewModel() {
 
     }
 
+    fun updateTask(todoTask: TodoTask){
+        viewModelScope.launch { todoRepository.updateTask(todoTask) }
+    }
     fun completeTask(todoTask: TodoTask) {
         viewModelScope.launch {
             //利用 copy 创建一个全新对象，并把状态反转

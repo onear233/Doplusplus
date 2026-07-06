@@ -36,10 +36,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.onear.doplusplus.R
 
-@Preview
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(showBackground = true)
 @Composable
 fun PreviewLoginScreen() {
-    LoginScreen {  }
+    MaterialTheme {
+        LoginScreen(onNavigateBack = {})
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

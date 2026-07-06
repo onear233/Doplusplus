@@ -22,7 +22,7 @@ import com.onear.doplusplus.viewmodel.TodoViewModel
 
 
 @Composable
-fun MainScreen(onNavigateToLogin: () -> Unit) {
+fun MainScreen(onNavigate: (String) -> Unit = {}) {
     var currentDestination by rememberSaveable { mutableStateOf(AppDestinations.TODAY) }
 
     val currentContext = LocalContext.current;
@@ -66,7 +66,7 @@ fun MainScreen(onNavigateToLogin: () -> Unit) {
             AppDestinations.TODO -> TodoScreen(viewModel = todoViewModel)
             AppDestinations.PROFILE -> ProfileScreen(
                 viewModel = profileViewModel,
-                onNavigateToLogin = onNavigateToLogin
+                onNavigate = onNavigate
             )
         }
     }

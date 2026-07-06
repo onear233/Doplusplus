@@ -39,6 +39,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.onear.doplusplus.NavRoutes
 import com.onear.doplusplus.viewmodel.ProfileViewModel
 
 @Preview(showBackground = true)
@@ -54,7 +55,7 @@ fun PreviewProfileScreen() {
 fun ProfileScreen(
     modifier: Modifier = Modifier,
     viewModel: ProfileViewModel? = null,
-    onNavigateToLogin:() -> Unit={}
+    onNavigate: (String) -> Unit = {}
 ) {
     // 临时测试用的登录状态变量，实际开发中可以从 viewModel 中获取
     var isLoggedIn by remember { mutableStateOf(false) }
@@ -84,7 +85,7 @@ fun ProfileScreen(
                     .padding(vertical = 24.dp)
                     .clickable {
                         if (!isLoggedIn) {
-                            onNavigateToLogin()
+                            onNavigate(NavRoutes.LOGIN)
                         }
                     },
                 color = MaterialTheme.colorScheme.surfaceVariant,
@@ -118,7 +119,6 @@ fun ProfileScreen(
 
                     Spacer(modifier = Modifier.width(16.dp))
 
-                    // 用户名 / 点击登录
                     Column {
                         Text(
                             text = if (isLoggedIn) mockUserName else "点击登录",
@@ -143,7 +143,7 @@ fun ProfileScreen(
             Surface(
                 modifier = Modifier.fillMaxWidth(),
                 shape = MaterialTheme.shapes.medium,
-                tonalElevation = 1.dp // 微微抬高增加层级感
+                tonalElevation = 1.dp
             ) {
                 Column {
                     // 设置项
@@ -161,7 +161,7 @@ fun ProfileScreen(
                                 contentDescription = "Arrow"
                             )
                         },
-                        modifier = Modifier.clickable { /* TODO: 跳转设置 */ }
+                        modifier = Modifier.clickable { onNavigate(NavRoutes.SETTINGS) }
                     )
 
                     // 关于项
@@ -179,7 +179,7 @@ fun ProfileScreen(
                                 contentDescription = "Arrow"
                             )
                         },
-                        modifier = Modifier.clickable { /* TODO: 跳转关于 */ }
+                        modifier = Modifier.clickable { onNavigate(NavRoutes.ABOUT) }
                     )
                 }
             }

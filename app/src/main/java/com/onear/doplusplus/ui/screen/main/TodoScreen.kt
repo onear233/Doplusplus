@@ -20,12 +20,15 @@ import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxValue
@@ -33,6 +36,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -69,17 +73,22 @@ fun TodoScreen(
 ) {
     /*
     Learn in USE:
-    Scaffold 可组合项提供了一个简单的 API，您可以使用该 API 根据 Material Design 准则快速组装应用结构。Scaffold 接受多个可组合项作为参数。其中包括以下各项：
+    Scaffold 可组合项提供了一个简单的 API，可以使用该 API 根据 Material Design 准则快速组装应用结构。Scaffold 接受多个可组合项作为参数。其中包括以下各项：
     topBar：屏幕顶部的应用栏。
     bottomBar：屏幕底部的应用栏。
     floatingActionButton：悬浮在屏幕右下角的按钮，可以使用该按钮来显示关键操作。
     */
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-    //有点像WPF里的binding
+    //好似WPF里的binding
     //界面刷新是数据驱动的，而不是直接操作
     val todoList by viewModel.todoListState.collectAsState()
-    var inputText by remember { mutableStateOf("") }
 
+    //
+    var inputText by remember { mutableStateOf("") }
+    var editingTask by remember { mutableStateOf<TodoTask?>(null) }
+    val sheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = false   //半屏展开
+    )
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         bottomBar = {
@@ -181,13 +190,60 @@ fun TodoScreen(
                     ListCard(
                         task = task,
                         onCheckedChange = { viewModel.completeTask(task) },
-                        onRemove = { viewModel.deleteTask(task) }
+                        onRemove = { viewModel.deleteTask(task) },
+                        onClick = {editingTask = task}
                     )
                 }
 
             }
         }
     }
+    if (editingTask != null){
+        val task = editingTask!!
+        var editText by remember(task.taskID) { mutableStateOf(task.taskText) }
+
+        ModalBottomSheet(
+            onDismissRequest = { editingTask = null },
+            sheetState = sheetState
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp, vertical = 16.dp)
+            ) {
+                Text(
+                    text = "编辑任务",
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
+
+                OutlinedTextField(
+                    value = editText,
+                    onValueChange = { editText = it },
+                    label = { Text("任务内容") },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true
+                )
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                Button(
+                    onClick = {
+                        if (editText.isNotBlank()) {
+                            viewModel.updateTask(task.copy(taskText = editText))
+                            editingTask = null
+                        }
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("保存")
+                }
+            }
+        }
+    }
+
+
+
 
 
 }
@@ -198,6 +254,7 @@ fun ListCard(
     task: TodoTask,
     onCheckedChange: (Boolean) -> Unit, //回调方法，即：ListCard不可以对数据做任何操作，要由上一级完成
     onRemove: (TodoTask) -> Unit, //回调方法，处理右滑删除
+    onClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val scope = rememberCoroutineScope()
@@ -211,10 +268,11 @@ fun ListCard(
 
 
             }
-            // Reset item when toggling done status
             it != SwipeToDismissBoxValue.StartToEnd
         }
     )
+
+
     SwipeToDismissBox(
         state = swipeToDismissBoxState,
         modifier = Modifier.fillMaxSize(),
@@ -244,13 +302,15 @@ fun ListCard(
                 .fillMaxWidth(),
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.background
-            )
+            ),
+            onClick = onClick
         ) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 8.dp, vertical = 4.dp),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+
             ) {
                 Checkbox(
                     checked = task.isCompleted,
