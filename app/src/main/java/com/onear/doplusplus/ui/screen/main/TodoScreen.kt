@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -82,8 +83,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
-import java.util.Locale
 import androidx.compose.ui.platform.LocalLocale
+import com.onear.doplusplus.ui.screen.todo.ListCard
 
 private val filterPresetColors = listOf(
     0xFF6750A4L to "紫",
@@ -116,6 +117,7 @@ fun TodoScreen(
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        // 最上方的topbar，“待办”二字
         topBar = {
             CenterAlignedTopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -208,18 +210,7 @@ fun TodoScreen(
             )
 
             if (todoList.isEmpty()) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = stringResource(R.string.no_tasks),
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
-                    )
-                }
+                EmptyTaskPlaceHolder(modifier.weight(1f))
             } else {
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -287,6 +278,9 @@ fun TodoScreen(
             onDismissRequest = { showCreateSheet = false },
             sheetState = createSheetState
         ) {
+            if (inputText != "") {
+                createText = inputText
+            }
             TaskEditSheetContent(
                 title = stringResource(R.string.create_task_title),
                 taskText = createText,
@@ -325,6 +319,23 @@ fun TodoScreen(
         )
     }
 }
+
+@Composable
+private fun EmptyTaskPlaceHolder(modifier: Modifier) {
+    Box(
+        modifier = Modifier
+            .fillMaxHeight()
+            .fillMaxWidth(),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = stringResource(R.string.no_tasks),
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+        )
+    }
+}
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -381,7 +392,11 @@ private fun TaskEditSheetContent(
             Spacer(modifier = Modifier.width(12.dp))
             Text(
                 text = if (dueDate != null) {
-                    SimpleDateFormat("yyyy-MM-dd", LocalLocale.current.platformLocale).format(Date(dueDate))
+                    SimpleDateFormat("yyyy-MM-dd", LocalLocale.current.platformLocale).format(
+                        Date(
+                            dueDate
+                        )
+                    )
                 } else {
                     stringResource(R.string.set_due_date_hint)
                 },
@@ -616,7 +631,10 @@ private fun CreateFilterDialog(
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
-            Text(stringResource(R.string.create_filter_title), style = MaterialTheme.typography.titleLarge)
+            Text(
+                stringResource(R.string.create_filter_title),
+                style = MaterialTheme.typography.titleLarge
+            )
         },
         text = {
             Column {
@@ -683,135 +701,4 @@ private fun CreateFilterDialog(
     )
 }
 
-@Composable
-fun ListCard(
-    task: TodoTask,
-    onCheckedChange: (Boolean) -> Unit,
-    onRemove: (TodoTask) -> Unit,
-    onClick: () -> Unit = {},
-    modifier: Modifier = Modifier
-) {
-    val scope = rememberCoroutineScope()
-    val swipeToDismissBoxState = rememberSwipeToDismissBoxState(
-        confirmValueChange = {
-            if (it == SwipeToDismissBoxValue.EndToStart) {
-                scope.launch {
-                    delay(200)
-                    onRemove(task)
-                }
-            }
-            it != SwipeToDismissBoxValue.StartToEnd
-        }
-    )
 
-    SwipeToDismissBox(
-        state = swipeToDismissBoxState,
-        modifier = Modifier.fillMaxSize(),
-        backgroundContent = {
-            when (swipeToDismissBoxState.dismissDirection) {
-                SwipeToDismissBoxValue.EndToStart -> {
-                    Icon(
-                        imageVector = Icons.Default.Delete,
-                        contentDescription = "删除",
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .clip(RoundedCornerShape(16.dp))
-                            .background(MaterialTheme.colorScheme.errorContainer)
-                            .wrapContentSize(Alignment.CenterEnd)
-                            .padding(16.dp),
-                        tint = MaterialTheme.colorScheme.error
-                    )
-                }
-                SwipeToDismissBoxValue.Settled -> {}
-                else -> {}
-            }
-        }
-    ) {
-        Card(
-            modifier = modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
-            ),
-            onClick = onClick
-        ) {
-            val dueDate = task.taskDueDate
-            val tag = task.filterTag
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 4.dp, vertical = 4.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Checkbox(
-                    checked = task.isCompleted,
-                    onCheckedChange = onCheckedChange
-                )
-
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(vertical = 8.dp)
-                ) {
-                    Text(
-                        text = task.taskText,
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = if (task.isCompleted)
-                            MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
-                        else
-                            MaterialTheme.colorScheme.onSurface,
-                        textDecoration = if (task.isCompleted)
-                            TextDecoration.LineThrough
-                        else
-                            TextDecoration.None,
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis
-                    )
-
-                    if (dueDate != null || tag != null) {
-                        Spacer(modifier = Modifier.height(6.dp))
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(12.dp)
-                        ) {
-                            if (dueDate != null) {
-                                Row(verticalAlignment = Alignment.CenterVertically) {
-                                    Icon(
-                                        imageVector = Icons.Default.DateRange,
-                                        contentDescription = null,
-                                        modifier = Modifier.size(14.dp),
-                                        tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
-                                    )
-                                    Spacer(modifier = Modifier.width(3.dp))
-                                    Text(
-                                        text = SimpleDateFormat(
-                                            "MM-dd",
-                                            LocalLocale.current.platformLocale
-                                        ).format(Date(dueDate)),
-                                        style = MaterialTheme.typography.labelSmall,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
-                                    )
-                                }
-                            }
-                            if (tag != null) {
-                                Surface(
-                                    shape = RoundedCornerShape(6.dp),
-                                    color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f)
-                                ) {
-                                    Text(
-                                        text = tag,
-                                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
-                                        style = MaterialTheme.typography.labelSmall,
-                                        color = MaterialTheme.colorScheme.onSecondaryContainer
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
-
-                Spacer(modifier = Modifier.width(4.dp))
-            }
-        }
-    }
-}
