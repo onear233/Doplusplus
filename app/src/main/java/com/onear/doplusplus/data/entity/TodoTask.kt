@@ -1,6 +1,6 @@
 package com.onear.doplusplus.data.entity
 
-import android.R
+
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.sql.Date

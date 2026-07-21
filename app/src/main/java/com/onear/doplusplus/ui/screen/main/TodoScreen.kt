@@ -60,9 +60,10 @@ import com.onear.doplusplus.ui.theme.DoTheme
 import com.onear.doplusplus.viewmodel.TodoViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -81,6 +82,7 @@ fun TodoScreen(
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     //好似WPF里的binding
     //界面刷新是数据驱动的，而不是直接操作
+    //类型是
     val todoList by viewModel.todoListState.collectAsState()
 
     //
@@ -191,14 +193,14 @@ fun TodoScreen(
                         task = task,
                         onCheckedChange = { viewModel.completeTask(task) },
                         onRemove = { viewModel.deleteTask(task) },
-                        onClick = {editingTask = task}
+                        onClick = { editingTask = task }
                     )
                 }
 
             }
         }
     }
-    if (editingTask != null){
+    if (editingTask != null) {
         val task = editingTask!!
         var editText by remember(task.taskID) { mutableStateOf(task.taskText) }
 
@@ -241,9 +243,6 @@ fun TodoScreen(
             }
         }
     }
-
-
-
 
 
 }
@@ -311,7 +310,7 @@ fun ListCard(
                     .padding(horizontal = 8.dp, vertical = 4.dp),
                 verticalAlignment = Alignment.CenterVertically,
 
-            ) {
+                ) {
                 Checkbox(
                     checked = task.isCompleted,
                     onCheckedChange = { isChecked ->
@@ -355,10 +354,13 @@ fun ListCard(
 
 }
 
+private val timeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+
 private fun formatTime(timestamp: Long): String {
-    val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
-    return sdf.format(Date(timestamp))
+    val dateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.systemDefault())
+    return dateTime.format(timeFormatter)
 }
+
 
 @Composable
 fun FilterChip(chipType: ChipType) {
