@@ -23,8 +23,9 @@ interface TodoDao {
     @Update
     suspend fun updateTask(task: TodoTask)
 
-    //查
     @Query("SELECT * FROM todo_database ORDER BY taskCreateDate DESC")
     fun getAllTasks(): Flow<List<TodoTask>>
 
+    @Query("SELECT * FROM todo_database WHERE filterTag = :tag ORDER BY taskCreateDate DESC")
+    fun getTasksByTag(tag: String): Flow<List<TodoTask>>
 }

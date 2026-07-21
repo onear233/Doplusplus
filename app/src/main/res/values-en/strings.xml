@@ -18,4 +18,25 @@
     <string name="license_agreement_checkbox">I\'ve read the Privacy Policy and the Service Agreement</string>
     <string name="click_login_text">Click to login</string>
 
+    <!--    Todo page-->
+    <string name="todo_title">ToDo</string>
+    <string name="quick_add_hint">Quick add task…</string>
+    <string name="no_tasks">No tasks</string>
+    <string name="edit_task_title">Edit Task</string>
+    <string name="create_task_title">Create Task</string>
+    <string name="task_content_label">Task content</string>
+    <string name="set_due_date_hint">Set due date (optional)</string>
+    <string name="select_tag_label">Select tag</string>
+    <string name="no_tags_hint">No tags yet, create one at the top</string>
+    <string name="save_button">Save</string>
+    <string name="confirm_button">OK</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="create_filter_title">Create Filter</string>
+    <string name="filter_name_label">Filter name</string>
+    <string name="select_color_label">Select color</string>
+    <string name="create_button">Create</string>
+    <string name="all_filter">All</string>
+    <string name="add_filter_desc">Add filter</string>
+    <string name="delete_filter_desc">Delete filter</string>
+
 </resources>

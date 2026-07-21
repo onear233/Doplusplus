@@ -31,7 +31,7 @@ fun MainScreen(onNavigate: (String) -> Unit = {}) {
 
     //组装 Repository (把 Dao 传进去)
     //repository的作用是给viewmodel数据；viewmodel不关心数据是怎么来的，repo看起来只是调用了dao，事实上随着项目功能变多repo的逻辑会变得多样化
-    val repository = TodoRepository(database.todoDao())
+    val repository = TodoRepository(database.todoDao(), database.filterDao())
 
     //自定义一个工厂，告诉系统怎么创建带参数的TodoViewModel
     val viewModelFactory = object : ViewModelProvider.Factory {

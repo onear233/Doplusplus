@@ -22,4 +22,25 @@
     <string name="license_agreement_checkbox">已阅读并同意《隐私政策》和《服务协议》</string>
     <string name="click_login_text">点击登录</string>
 
+    <!--    待办页面-->
+    <string name="todo_title">待办</string>
+    <string name="quick_add_hint">快速添加任务…</string>
+    <string name="no_tasks">暂无任务</string>
+    <string name="edit_task_title">编辑任务</string>
+    <string name="create_task_title">创建任务</string>
+    <string name="task_content_label">任务内容</string>
+    <string name="set_due_date_hint">设置截止日期（可选）</string>
+    <string name="select_tag_label">选择标签</string>
+    <string name="no_tags_hint">暂无标签，请先在顶部创建</string>
+    <string name="save_button">保存</string>
+    <string name="confirm_button">确定</string>
+    <string name="cancel_button">取消</string>
+    <string name="create_filter_title">创建过滤器</string>
+    <string name="filter_name_label">过滤器名称</string>
+    <string name="select_color_label">选择颜色</string>
+    <string name="create_button">创建</string>
+    <string name="all_filter">全部</string>
+    <string name="add_filter_desc">添加过滤器</string>
+    <string name="delete_filter_desc">删除过滤器</string>
+
 </resources>

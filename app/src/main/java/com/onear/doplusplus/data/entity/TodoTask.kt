@@ -16,5 +16,6 @@ data class TodoTask(
     var taskText: String,
     var taskDueDate: Long? = null,
     val taskCreateDate: Long = System.currentTimeMillis(),
-    var isCompleted: Boolean = false
+    var isCompleted: Boolean = false,
+    var filterTag: String? = null
 )
