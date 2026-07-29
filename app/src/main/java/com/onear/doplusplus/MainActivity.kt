@@ -11,6 +11,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Person
@@ -32,8 +33,6 @@ import com.onear.doplusplus.ui.theme.DoTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-
-
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
@@ -133,8 +132,9 @@ enum class AppDestinations(
     val icon: ImageVector,
 ) {
     TODAY(R.string.nav_today, Icons.Default.DateRange),
-    TODO(R.string.nav_todo, Icons.Default.List),
+    TODO(R.string.nav_todo, Icons.AutoMirrored.Filled.List),
     PROFILE(R.string.nav_profile, Icons.Default.Person),
+
 }
 
 @Composable
@@ -149,13 +149,7 @@ fun Greeting(content: String, modifier: Modifier = Modifier) {
 
 }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    DoTheme {
-        Greeting("Android")
-    }
-}
+
 
 object NavRoutes {
     const val MAIN = "main"
