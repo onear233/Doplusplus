@@ -22,6 +22,7 @@
     <string name="license_agreement_checkbox">已阅读并同意《隐私政策》和《服务协议》</string>
     <string name="click_login_text">点击登录</string>
 
+
     <!--    待办页面-->
     <string name="todo_title">待办</string>
     <string name="quick_add_hint">快速添加任务…</string>
@@ -43,4 +44,7 @@
     <string name="add_filter_desc">添加过滤器</string>
     <string name="delete_filter_desc">删除过滤器</string>
 
+
+    <string name="nav_arrangements">安排</string>
+    <string name="arr_title">日程</string>
 </resources>

@@ -10,13 +10,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.onear.doplusplus.AppDestinations
 import com.onear.doplusplus.data.TodoRepository
 import com.onear.doplusplus.data.local.AppDatabase
+import com.onear.doplusplus.ui.screen.main.arrangement.TodoScreen
 import com.onear.doplusplus.viewmodel.ProfileViewModel
 import com.onear.doplusplus.viewmodel.TodoViewModel
 
@@ -63,7 +63,7 @@ fun MainScreen(onNavigate: (String) -> Unit = {}) {
         //根据当前的导航目标，显示对应的Screen组件
         when (currentDestination) {
             AppDestinations.TODAY -> TodayScreen()
-            AppDestinations.TODO -> TodoScreen(viewModel = todoViewModel)
+            AppDestinations.TODO -> ArrangementScreen(todoViewModel)
             AppDestinations.PROFILE -> ProfileScreen(
                 viewModel = profileViewModel,
                 onNavigate = onNavigate

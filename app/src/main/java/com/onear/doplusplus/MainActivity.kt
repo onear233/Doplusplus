@@ -137,17 +137,7 @@ enum class AppDestinations(
 
 }
 
-@Composable
-fun Greeting(content: String, modifier: Modifier = Modifier) {
-    MaterialTheme() {
-        Text(
-            text = content,
-            fontSize = 30.sp,
-            modifier = modifier
-        )
-    }
 
-}
 
 
 
@@ -158,4 +148,3 @@ object NavRoutes {
     const val ABOUT = "about"
 }
 
-data class Message(val author: String, val content: String)

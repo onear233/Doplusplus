@@ -38,5 +38,7 @@
     <string name="all_filter">All</string>
     <string name="add_filter_desc">Add filter</string>
     <string name="delete_filter_desc">Delete filter</string>
+    <string name="nav_arrangements">Arrangement</string>
+    <string name="arr_title">Arrangement</string>
 
 </resources>

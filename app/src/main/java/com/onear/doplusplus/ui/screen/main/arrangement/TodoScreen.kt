@@ -1,6 +1,5 @@
-package com.onear.doplusplus.ui.screen.main
+package com.onear.doplusplus.ui.screen.main.arrangement
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,7 +17,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
@@ -27,7 +25,6 @@ import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Label
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DatePicker
@@ -63,7 +60,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.onear.doplusplus.R
 import com.onear.doplusplus.data.entity.FilterTag
 import com.onear.doplusplus.data.entity.TodoTask
@@ -72,14 +68,14 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import androidx.compose.ui.platform.LocalLocale
 import com.onear.doplusplus.ui.screen.todo.*
-
+import java.util.Calendar
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TodoScreen(
     modifier: Modifier = Modifier,
-    viewModel: TodoViewModel = viewModel()
+    viewModel: TodoViewModel
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val todoList by viewModel.todoListState.collectAsState()
@@ -96,24 +92,6 @@ fun TodoScreen(
 
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        // 最上方的topbar，“待办”二字
-        topBar = {
-            CenterAlignedTopAppBar(
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface,
-                    titleContentColor = MaterialTheme.colorScheme.onSurface,
-                ),
-                title = {
-                    Text(
-                        text = stringResource(R.string.todo_title),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        style = MaterialTheme.typography.titleLarge
-                    )
-                },
-                scrollBehavior = scrollBehavior,
-            )
-        },
         bottomBar = {
             Surface(
                 shadowElevation = 8.dp,
@@ -299,6 +277,8 @@ fun TodoScreen(
     }
 }
 
+
+
 @Composable
 private fun EmptyTaskPlaceHolder(modifier: Modifier) {
     Box(
@@ -434,11 +414,11 @@ private fun TaskEditSheetContent(
             confirmButton = {
                 TextButton(onClick = {
                     datePickerState.selectedDateMillis?.let { millis ->
-                        val cal = java.util.Calendar.getInstance().apply {
+                        val cal = Calendar.getInstance().apply {
                             timeInMillis = millis
-                            set(java.util.Calendar.HOUR_OF_DAY, 23)
-                            set(java.util.Calendar.MINUTE, 59)
-                            set(java.util.Calendar.SECOND, 59)
+                            set(Calendar.HOUR_OF_DAY, 23)
+                            set(Calendar.MINUTE, 59)
+                            set(Calendar.SECOND, 59)
                         }
                         onDueDateChange(cal.timeInMillis)
                     }
